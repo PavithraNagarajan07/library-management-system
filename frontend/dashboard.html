@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Enterprise Library</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-university"></i>
+                <span>UniLibrary</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#" class="nav-link active" data-view="overview">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-view="catalog">
+                        <i class="fas fa-book"></i>
+                        <span>Book Catalog</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-view="my-books">
+                        <i class="fas fa-bookmark"></i>
+                        <span>My Borrows</span>
+                    </a>
+                </li>
+                <!-- Admin Only Items -->
+                <li class="nav-item admin-only" style="display: none;">
+                    <a href="#" class="nav-link" data-view="audit-logs">
+                        <i class="fas fa-history"></i>
+                        <span>Audit Logs</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="sidebar-footer" style="padding-top: 2rem; border-top: 1px solid #334155;">
+                <a href="#" class="nav-link" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Sign Out</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <div class="breadcrumb">
+                    <h2 id="viewTitle">Dashboard Overview</h2>
+                    <p id="viewSubtitle">Welcome back, <span id="userName">User</span></p>
+                </div>
+                <div class="user-profile">
+                    <span class="badge badge-success" id="userRole">Member</span>
+                </div>
+            </header>
+
+            <!-- Overview Section -->
+            <section id="view-overview" class="view-section">
+                <div class="stats-grid" id="adminStats" style="display: none;">
+                    <div class="stats-card">
+                        <h3>Total Books</h3>
+                        <div class="value" id="stat-total-books">0</div>
+                    </div>
+                    <div class="stats-card">
+                        <h3>Active Members</h3>
+                        <div class="value" id="stat-active-members">0</div>
+                    </div>
+                    <div class="stats-card">
+                        <h3>Books Issued</h3>
+                        <div class="value" id="stat-books-issued">0</div>
+                    </div>
+                    <div class="stats-card">
+                        <h3>Overdue</h3>
+                        <div class="value" id="stat-overdue" style="color: var(--danger);">0</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div
+                        style="padding: 1.5rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+                        <h3 id="tableTitle">Recent Activity</h3>
+                        <div id="tableActions"></div>
+                    </div>
+                    <div class="table-container">
+                        <table id="mainTable">
+                            <thead>
+                                <tr id="tableHeader">
+                                    <!-- Dynamic Columns -->
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody">
+                                <!-- Dynamic Content -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Book Catalog View -->
+            <section id="view-catalog" class="view-section" style="display: none;">
+                <div style="margin-bottom: 2rem; display: flex; gap: 1rem;">
+                    <input type="text" id="bookSearch" class="form-input" style="max-width: 400px;"
+                        placeholder="Search by title, author, or ISBN...">
+                    <select id="categoryFilter" class="form-input" style="max-width: 200px;">
+                        <option value="">All Categories</option>
+                    </select>
+                    <button class="btn btn-primary admin-only" id="addBookBtn" style="width: auto;">
+                        <i class="fas fa-plus"></i>
+                        <span>Add Book</span>
+                    </button>
+                    <button class="btn btn-primary admin-only" id="bulkUploadBtn"
+                        style="width: auto; background-color: var(--secondary-color);">
+                        <i class="fas fa-file-csv"></i>
+                        <span>Bulk Upload</span>
+                    </button>
+                    <input type="file" id="bulkFileInput" style="display: none;" accept=".csv">
+                </div>
+                <div id="bookGrid"
+                    style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+                    <!-- Book Cards -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal-backdrop" id="bookModal">
+        <div class="modal">
+            <h2 id="modalTitle" style="margin-bottom: 1.5rem;">Add New Book</h2>
+            <form id="bookForm">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>ISBN</label>
+                        <input type="text" id="isbn" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" id="title" class="form-input" required>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>Author</label>
+                        <input type="text" id="author" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <input type="text" id="category" class="form-input" required>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>Total Copies</label>
+                        <input type="number" id="total_copies" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Year</label>
+                        <input type="number" id="year" class="form-input" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Publisher</label>
+                    <input type="text" id="publisher" class="form-input" required>
+                </div>
+                <div class="form-group" style="display: none;">
+                    <label>Edition</label>
+                    <input type="text" id="edition" class="form-input" value="1st">
+                </div>
+                <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                    <button type="submit" class="btn btn-primary">Save Book</button>
+                    <button type="button" class="btn" style="background: #e2e8f0;"
+                        onclick="closeModal('bookModal')">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>
