@@ -31,7 +31,7 @@ A production-ready, enterprise-grade digital platform for institutional library 
 - **Frontend:** Vanilla JavaScript (ES6+), Modern CSS (Custom Design System).
 - **API Docs:** Interactive Swagger UI (OpenAPI).
 
-## 📂 Project Structure
+## Project Structure
 
 ```text
 lib-management/
@@ -79,6 +79,3 @@ lib-management/
 - [ ] Barcode/QR Code scanning for quick book returns.
 - [ ] Integrated Payment Gateway for fine payments.
 - [ ] Advanced PDF/Excel report exporting.
-
----
-*Designed with ❤️ for institutional excellence.*
